@@ -1,47 +1,54 @@
 import express, { Express, Request, Response } from 'express';
-import Database from './db';
+import { DBProvider, MapInstance } from './db';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT;
-const db = new Database();
+const db = new DBProvider(new MapInstance());
 
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  // curl -X POST 'http://localhost:8000
-  res.json({ "todo_tasks": db.getValues() });
+    // curl -X POST 'http://localhost:8000
+    res.json({ "todo_tasks": db.getAllRecords() });
+});
+
+app.post('/todo/', (req, res) => {
+    // curl -X POST 'http://localhost:8000/todo' -H "Content-Type: application/json" -d '{"task": "cleanup the room"}'
+    try {
+        res.status(200).json(db.addRecord({ ...req.body }));
+    } catch (error) {
+        res.status(400).json({ "error": `${error}` });
+    }
 });
 
 app.route('/todo/:id')
-  .get((req, res) => {
-    // curl -X POST 'http://localhost:8000/todo/2'
-    res.json(db.getRecord(req.params.id));
-  })
+    .get((req, res) => {
+        // curl 'http://localhost:8000/todo/2'
+        res.json(db.getRecord(req.params.id));
+    })
 
-  .post((req, res) => {
-    // curl -X POST 'http://localhost:8000/todo/2' -H "Content-Type: application/json" -d '{"task": "cleanup the room"}' 
-    let isAdded = db.addRecord({ id: req.params.id, task: req.body.task });
-    if (!isAdded) {
-      return res.status(400).json({ "error": `Record ${req.params.id} already exists!` });
-    }
-    res.send(200);
-  })
+    .put((req, res) => {
+        // curl -X PUT 'http://localhost:8000/todo/1' -H "Content-Type: application/json" -d '{"task": "buy milk"}' 
+        try {
+            res.status(200).json(db.updateRecord({ ...req.body, id: req.params.id }));
+        } catch (error) {
+            res.status(400).json({ "error": `${error}` });
+        }
+    })
 
-  .put((req, res) => {
-    // curl -X PUT 'http://localhost:8000/todo/1' -H "Content-Type: application/json" -d '{"task": "buy milk"}' 
-    let updated = db.updateRecord({ id: req.params.id, task: req.body.task });
-    res.json(updated);
-  })
-
-  .delete((req, res) => {
-    // curl -X DELETE 'http://localhost:8000/todo/1'
-    db.deleteRecord(req.params.id);
-    res.send(200);
-  })
+    .delete((req, res) => {
+        // curl -X DELETE 'http://localhost:8000/todo/1'
+        try {
+            db.deleteRecord(req.params.id);
+        } catch (error) {
+            return res.status(400).json({ "error": `Record ${req.params.id} doesn't exist!` });
+        }
+        res.status(200);
+    })
 
 app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
+    console.log(`[server]: Server is running at http://localhost:${port}`);
 });
