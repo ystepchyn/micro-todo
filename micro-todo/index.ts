@@ -1,5 +1,5 @@
 import express, { Express, Request, Response } from 'express';
-import { DBProvider, MapInstance } from './db';
+import { DBProvider, MapInstance } from './src/db';
 import dotenv from 'dotenv';
 
 dotenv.config();

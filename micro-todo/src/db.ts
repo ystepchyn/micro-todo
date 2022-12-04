@@ -1,31 +1,7 @@
 import mongoose from "mongoose";
-import { ToDoModel } from "./models/mongo_models";
+import { ToDoModel } from "./models/mongo";
+import { ToDo, Author, dbInstanceStrategy} from './types'
 
-
-export interface ToDo {
-    id?: string,
-    author: string,
-    name: string,
-    description: string,
-    createdAt?: Date,
-    modifiedAt?: Date
-}
-
-export interface Author {
-    id?: string,
-    firstname: string,
-    lastname: string,
-    createdAt?: Date,
-    modifiedAt?: Date
-}
-
-interface dbInstanceStrategy {
-    getAllRecords(): Array<ToDo> | Array<Author>;
-    getRecord(id: string): ToDo | Author;
-    addRecord(r: ToDo | Author): ToDo | Author;
-    updateRecord(r: ToDo | Author): ToDo | Author;
-    deleteRecord(id: string): void;
-}
 
 export class MapInstance implements dbInstanceStrategy {
 
@@ -147,12 +123,10 @@ class MongoInstance {
 
     async mongoTest() {
         try {
-            await mongoose.connect(
-                `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/${this.databaseName}`
-            );
+            await mongoose.connect(process.env.MONGO_DB as string);
             //await mongoose.connect('mongodb://localhost:27017/test');
         } catch (error) {
-            handleError(error);
+            //handleError(error);
         }
     }
 }
