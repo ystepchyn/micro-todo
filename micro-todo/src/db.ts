@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ToDoModel } from "./models/mongo";
+import { ToDoModel } from "./models/mongo/Todo";
 import { ToDo, Author, dbInstanceStrategy} from './types'
 
 
@@ -108,16 +108,13 @@ class MongoInstance {
     }
 
     async addRecord(r: ToDo) {
-        // https://mongoosejs.com/docs/
         return await new ToDoModel(r).save();
     }
 
     async updateRecord(r) {
-        //https://mongoosejs.com/docs/documents.html
     }
 
     async findRecord(id: string) {
-        // https://mongoosejs.com/docs/api.html#model_Model-findById
         return await this.model.findById(id).exec();
     }
 
@@ -126,7 +123,6 @@ class MongoInstance {
             await mongoose.connect(process.env.MONGO_DB as string);
             //await mongoose.connect('mongodb://localhost:27017/test');
         } catch (error) {
-            //handleError(error);
         }
     }
 }
