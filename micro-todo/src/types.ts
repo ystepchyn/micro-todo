@@ -16,9 +16,9 @@ export interface Author {
 }
 
 export interface dbInstanceStrategy {
-	getAllRecords(): Array<ToDo> | Array<Author>;
-	getRecord(id: string): ToDo | Author;
-	addRecord(r: ToDo | Author): ToDo | Author;
-	updateRecord(r: ToDo | Author): ToDo | Author;
-	deleteRecord(id: string): void;
+	getAllRecords(): Promise<any>;
+	getRecord(id: string): Promise<any>;
+	addRecord(r: ToDo | Author): Promise<any>;
+	updateRecord(r: ToDo | Author): Promise<any>;
+	deleteRecord(id: string): Promise<any>;
 }
