@@ -1,7 +1,8 @@
-import { ToDo, Author, dbInstanceStrategy } from '../../types'
+import { ToDo, Author, dbInstance } from '../../types'
 
 
-export class MapInstance implements dbInstanceStrategy {
+// export class MapInstance implements dbInstance {
+export class MapInstance {
 
     private instance!: Map<string, ToDo | Author>;
 
@@ -16,20 +17,20 @@ export class MapInstance implements dbInstanceStrategy {
         const randomness = Math.random().toString(36).slice(2);
         return dateString + randomness;
     }
-
-    getAllRecords(table?: string): Array<ToDo> | Array<Author> {
+/* 
+    async getAllRecords(table?: string): Promise<any> {
         // TODO: probably should add a table param from where to fetch records
         return Array.from(this.instance.values()) as Array<ToDo> | Array<Author>;
     }
 
-    getRecord(id: string): ToDo | Author {
+    async getRecord(id: string): Promise<any> {
         if (!this.instance.has(id)) {
             throw "Record doesn't exist in Map!";
         };
         return this.instance.get(id) as ToDo | Author;
     }
 
-    addRecord(r: ToDo | Author): ToDo | Author {
+    async addRecord(r: ToDo | Author): Promise<any> {
         //r.id = r.id ? r.id : this.uniqueId();
         r.id = this.uniqueId();
         r.createdAt = new Date();
@@ -38,7 +39,7 @@ export class MapInstance implements dbInstanceStrategy {
         return r;
     }
 
-    updateRecord(r: ToDo | Author): ToDo | Author {
+    async updateRecord(r: ToDo | Author): Promise<any> {
         if (!this.instance.has(r.id as string)) {
             throw `Record with id ${r.id} doesn't exist in Map!`;
         }
@@ -48,10 +49,10 @@ export class MapInstance implements dbInstanceStrategy {
         //return this.instance.get(r.id);
     }
 
-    deleteRecord(id: string): void {
+    async deleteRecord(id: string): Promise<any> {
         if (!this.instance.has(id)) {
             throw `Record with id ${id} doesn't exist in Map!`;
         }
         this.instance.delete(id);
-    }
+    } */
 }

@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 
-export const ToDoModel = mongoose.model('ToDo', {
-	id: String,
+const todoScheme = mongoose.Schema({
+	// id: String,
 	author: String,
 	name: String,
 	description: String,
 	createdAt: Date,
 	modifiedAt: Date
-});
+}, { "strict": "throw" });
+
+const ToDoModel = mongoose.model('ToDo', todoScheme);
+
+export default ToDoModel;

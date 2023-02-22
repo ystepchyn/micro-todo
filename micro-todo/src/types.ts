@@ -15,10 +15,10 @@ export interface Author {
 	modifiedAt?: Date
 }
 
-export interface dbInstanceStrategy {
-	getAllRecords(): Promise<any>;
+export interface dbInstance {
+	getAllRecords(table: string): Promise<any>;
 	getRecord(id: string): Promise<any>;
-	addRecord(r: ToDo | Author): Promise<any>;
-	updateRecord(r: ToDo | Author): Promise<any>;
+	addRecord(data: ToDo | Author): Promise<any>;
+	updateRecord(id: string, data: ToDo | Author): Promise<any>;
 	deleteRecord(id: string): Promise<any>;
 }
