@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cd src && npm run dev",
+    "dev": "cd micro-todo && npm run dev",
     "start:mongo": "docker-compose -f ./docker-compose/mongo.yml up -d",
     "stop:mongo": "docker-compose -f ./docker-compose/mongo.yml stop"
   },
