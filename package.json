@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cd micro-todo && npm run dev",
     "start:mongo": "docker-compose -f ./docker-compose/mongo.yml up -d",
-    "stop:mongo": "docker-compose -f ./docker-compose/mongo.yml stop"
+    "stop:mongo": "docker-compose -f ./docker-compose/mongo.yml stop",
+    "start:postgres": "docker-compose -f ./docker-compose/postgresql.yml up -d",
+    "stop:postgres": "docker-compose -f ./docker-compose/postgresql.yml stop"
   },
   "keywords": [],
   "author": "",
