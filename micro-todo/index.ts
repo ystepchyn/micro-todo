@@ -4,19 +4,30 @@ import { restApiBuilder } from './src/restApiBuilder'
 
 dotenv.config();
 
-
 (async () => {
-    const app = express();
+
     const config = {
-        dbClient: process.env.DB_BACKEND,
+        dbClient: 'postgresql',
+        // dbClient: process.env.DB_BACKEND,
         port: process.env.PORT,
+
         MONGO_URL: process.env.MONGO_URL || "mongodb://localhost:27017/micro-todo",
         MONGO_USER: process.env.MONGO_USER,
-        MONGO_PW: process.env.MONGO_PW
+        MONGO_PW: process.env.MONGO_PW,
+
+        POSTGRES_USER: process.env.POSTGRES_USER,
+        POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
+        POSTGRES_HOST: process.env.POSTGRES_HOST,
+        POSTGRES_PORT: process.env.POSTGRES_PORT,
+        POSTGRES_DB: process.env.POSTGRES_DB
     };
 
+    const app = express();
     app.use(express.json());
-    app.use(await restApiBuilder.createTodoApi(config));
+
+    restApiBuilder.init(config);
+
+    app.use(await restApiBuilder.createTodoApi());
 
     app.listen(process.env.PORT, () => {
         console.log(`[server]: Server is running at http://localhost:${process.env.PORT}`);

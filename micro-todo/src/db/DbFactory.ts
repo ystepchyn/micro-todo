@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Client } from 'pg';
 
 
 class DatabaseConnectionFactory {
@@ -12,6 +13,10 @@ class DatabaseConnectionFactory {
                 "pass": config.MONGO_PW
             };
             return mongoose.connect(config.MONGO_URL, options);
+        } else if (config.dbClient === "postgresql") {
+            const client = new Client('postgres://admin:admin@localhost/microtodo');
+            await client.connect();
+            return client;
         } else {
             throw new Error(`${config.dbClient} is not supported`);
         }

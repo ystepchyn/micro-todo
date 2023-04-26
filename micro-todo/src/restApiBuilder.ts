@@ -1,24 +1,38 @@
-import DatabaseConnectionFactory from './db/DbFactory'
+import DatabaseConnectionFactory from './db/dbFactory'
 import { MicroTodoApi } from './microTodoApi'
 import { AuthorModelFactory, TodoModelFactory } from './models/modelFactory'
 import { Router } from 'express';
 
 
 export class restApiBuilder {
-    createAuthorApi(config: any) {
+    static db: any;
+    static dbhandler: import("/Users/yaroslavstepchyn/Documents/code/micro-todo/micro-todo/src/db/mongo-client/MongoInstance").MongoInstance | import("/Users/yaroslavstepchyn/Documents/code/micro-todo/micro-todo/src/db/sql-client/postgreSqlModel").PostgreSqlModel;
+
+    static async init(config: any) {
+        this.db = await DatabaseConnectionFactory.create(config);
+        this.dbhandler = TodoModelFactory.create(config);
+        this.dbhandler.initDb(this.db);
     }
 
-    static async createTodoApi(config: any) {
+    createAuthorApi() {
+    }
 
-        const db = await DatabaseConnectionFactory.create(config);
+    static async createTodoApi() {
 
-        const model = TodoModelFactory.create(config);
+        // const db = await DatabaseConnectionFactory.create(config);
 
-        MicroTodoApi.init(model);
+        // const dbhandler = TodoModelFactory.create(config);
+
+        // dbhandler.initDb(db);
+
+        MicroTodoApi.init(this.dbhandler);
 
         const app = Router();
 
-        app.get('/todo', MicroTodoApi.getAllRecords);
+        app.get('/todo', async (req, res) => {
+            res.json({ "todo_tasks": await this.dbhandler.getAllRecords() });
+        });
+        // app.get('/todo', MicroTodoApi.getAllRecords);
 
         app.post('/todo/', MicroTodoApi.addRecord);
 

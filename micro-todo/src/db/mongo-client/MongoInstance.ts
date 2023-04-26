@@ -3,9 +3,14 @@ import { ToDo, Author } from '../../types';
 
 export class MongoInstance implements dbInstance {
     model: any;
+    db: any;
 
     constructor(model: any) {
         this.model = model;
+    }
+
+    initDb(db: any) {
+        this.db = db;
     }
 
     getAllRecords() {
